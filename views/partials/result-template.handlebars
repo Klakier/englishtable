@@ -14,11 +14,9 @@
         <div class="col-md-offset-1 col-md-10">
             <table id="result-table" class="table table-bordered">
                 <thead>
-                <th contenteditable="true">English</th>
-                <th>#</th>
-                <th></th>
-                <th>#</th>
-                <th contenteditable="true">Polish</th>
+                {{#each ../columnNames}}
+                    <th>{{name}}</th>
+                {{/each}}
                 </thead>
                 <tbody>
                 {{#each elements}}
@@ -38,6 +36,6 @@
 {{/each}}
 <div class='row not-printable'>
     <div class="col-md-offset-7 col-md-1">
-        <span id="print-btn" class="material-icons" style="font-size: xx-large;color: green">print</span>
+        <span id="print-btn" class="material-icons standard-btn" >print</span>
     </div>
 </div>

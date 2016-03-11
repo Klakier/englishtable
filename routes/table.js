@@ -18,8 +18,7 @@ router.post('/', function(req, res) {
 
         var data = transformation(req.body.dictionary, req.body.elementsPerPage);
         var template = handlebars.compile(raw_template);
-        var view = template({items: data});
-        console.log(view);
+        var view = template({items: data, columnNames: req.body.columnNames});
 
         res.append('Content-Type', 'text/html');
         res.send(view);
@@ -29,6 +28,6 @@ router.post('/', function(req, res) {
 router.post('/print', function(req, res){
     res.append('Content-Type', 'text/html');
     res.send('<div>foobar</div>');
-})
+});
 
 module.exports = router;

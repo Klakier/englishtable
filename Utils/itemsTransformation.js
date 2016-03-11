@@ -21,7 +21,7 @@ var separate = function (array) {
     };
 
     array.forEach(function (element) {
-        result.leftColumn.push(element.source);
+        result.leftColumn.push(element.original);
         result.rightColumn.push(element.translated);
     });
 
@@ -42,6 +42,13 @@ var mix = function (array) {
 };
 
 module.exports = function (dictionary, elementsPerPage) {
+    if(!dictionary) {
+        return []
+    }
+
+    if(dictionary.length === 0){
+        return [];
+    }
     var splited = splitArray(dictionary, elementsPerPage);
     var result = [];
 

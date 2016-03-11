@@ -3,9 +3,9 @@ $(document).ready(function () {
     var $TABLE = $('#table');
     var $SHUFFLE_BTN = $('#shuffle');
     var $ELEMENTS_PER_PAGE_VALUE = $('#elements-per-page-value')
-    var $ROW_TEMPLATE=$TABLE.find('tr.template');
+    var $ROW_TEMPLATE = $TABLE.find('tr.template');
 
-    $ROW_TEMPLATE.find('.remove-row').click(function() {
+    $ROW_TEMPLATE.find('.remove-row').click(function () {
         $(this).parents('tr').detach();
     })
 
@@ -22,17 +22,6 @@ $(document).ready(function () {
 
     $('.table-remove').click(function () {
         $(this).parents('tr').detach();
-    });
-
-    $('.table-up').click(function () {
-        var $row = $(this).parents('tr');
-        if ($row.index() === 1) return; // Don't go above the header
-        $row.prev().before($row.get(0));
-    });
-
-    $('.table-down').click(function () {
-        var $row = $(this).parents('tr');
-        $row.next().after($row.get(0));
     });
 
 // A few jQuery helpers for exporting only
@@ -70,21 +59,56 @@ $(document).ready(function () {
         return parseInt($ELEMENTS_PER_PAGE_VALUE.html());
     };
 
+    var getColumnNames = function () {
+        var result = [];
+        $('.column-name-input').each(function (number, element) {
+            var $element = $(element);
+            var name = '';
+            if ($element.val()) {
+                name = $element.val();
+            } else {
+                name = $element.attr('placeholder');
+            }
+
+            result.push({name: name});
+        });
+
+        return result;
+    };
+
     $SHUFFLE_BTN.click(function () {
         var dictionary = extractDictionary();
         var elementsPerPage = getElementsPerPage();
+        var columnNames = getColumnNames();
         $.ajax(
             {
                 method: 'POST',
                 url: 'table',
-                data: {dictionary: dictionary, elementsPerPage: elementsPerPage},
+                data: {
+                    dictionary: dictionary,
+                    elementsPerPage: elementsPerPage,
+                    columnNames: columnNames
+                },
                 dataType: 'html',
                 success: function (result) {
                     $('#result').html(result);
+                },
+                error: function (jqHXR, textStatus, errorThrown) {
+                    $.notify({
+                        icon: 'material-icons error',
+                        title: "Internal error occurs.",
+                        message: textStatus + errorThrown
+                    }, {
+                        type: 'danger',
+                        template: '<div data-notify="container" class="alert">' +
+                        '<span class="material-icons">error</span>' +
+                        '<span data-notify="title">{1}</span>' +
+                        '<div data-notify="message">{2}</div>' +
+                        "</div>"
+                    })
+
                 }
-            }).fail(function () {
-            console.log(faile);
-        });
+            });
     });
 
 });

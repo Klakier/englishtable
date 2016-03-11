@@ -10,16 +10,16 @@
                     <table class="table">
                         <tbody>
                         <tr>
-                            <th>Source</th>
+                            <th>Original</th>
                             <th>Translated</th>
                             <th></th>
                         </tr>
                         <tr class="template">
                             <td>
-                                <div class="source-word" contenteditable="true" data-ph="Source word"></div>
+                                <div class="source-word" contenteditable="true" data-ph="Original word"></div>
                             </td>
                             <td>
-                                <div class="destination-word" contenteditable="true" data-ph="Destination word"></div>
+                                <div class="destination-word" contenteditable="true" data-ph="Translated word"></div>
                             </td>
                             <td>
                                 <span class="remove-row clickable material-icons">delete</span>
@@ -30,12 +30,9 @@
                 </div>
             </div>
         </div>
-        <div class="row">
-            <!--<hr class="style-one">-->
-        </div>
-        <div class="row">
-            <div class="options col-md-offset-3 col-md-4">
-                <span>elements per page</span>
+        <div class="row small-space-at-bottom">
+            <div class="options col-md-offset-3 col-md-3">
+                <span>Elements per page:</span>
                 <div class="btn-group">
                     <a type="button" class="btn btn-primary dropdown-toggle"
                        data-toggle="dropdown">
@@ -52,10 +49,37 @@
                     </ul>
                 </div>
             </div>
-            <div class="col-md-1">
-                <span id="shuffle" class="material-icons clickable">forward</span>
+        </div>
+        <div class="row">
+            <div class="col-md-offset-3 col-md-2">
+                <span>Columns names:</span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-offset-4">
+                <div>
+                    <span>1:</span> <input class="column-name-input" type="text" placeholder="original word"/>
+                </div>
+                <div>
+                    <span>2:</span> <input class="column-name-input" type="text" placeholder="left ordinary number"/>
+                </div>
+                <div>
+                    <span>3:</span> <input class="column-name-input" type="text" placeholder=""/>
+                </div>
+                <div>
+                    <span>4:</span> <input class="column-name-input" type="text" placeholder="right ordinary number"/>
+                </div>
+                <div>
+                    <span>5:</span> <input class="column-name-input" type="text" placeholder="translated word"/>
+                </div>
             </div>
         </div>
     </div>
-    <div id="result"></div>
+    <div class="row">
+        <div class="col-md-offset-7 col-md-1">
+            <span id="shuffle" class="material-icons standard-btn">done</span>
+        </div>
+    </div>
+</div>
+<div id="result"></div>
 </div>
