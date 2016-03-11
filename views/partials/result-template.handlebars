@@ -1,0 +1,43 @@
+<script type="text/javascript">
+    $(function () {
+        var $PRINT_BTN = $('#print-btn');
+        $PRINT_BTN.click(function () {
+            window.print();
+        })
+    })
+</script>
+<div class="row not-printable">
+    <hr>
+</div>
+{{#each items}}
+    <div class="row">
+        <div class="col-md-offset-1 col-md-10">
+            <table id="result-table" class="table table-bordered">
+                <thead>
+                <th contenteditable="true">English</th>
+                <th>#</th>
+                <th></th>
+                <th>#</th>
+                <th contenteditable="true">Polish</th>
+                </thead>
+                <tbody>
+                {{#each elements}}
+                    <tr>
+                        <td>{{left}}</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>{{right}}</td>
+                    </tr>
+                {{/each }}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="page-break"></div>
+{{/each}}
+<div class='row not-printable'>
+    <div class="col-md-offset-7 col-md-1">
+        <span id="print-btn" class="material-icons" style="font-size: xx-large;color: green">print</span>
+    </div>
+</div>

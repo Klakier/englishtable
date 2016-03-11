@@ -1,0 +1,91 @@
+@media print {
+    .not-printable {
+        display: none;
+    }
+
+    .page-break {
+        page-break-after: always;
+    }
+}
+
+hr {
+    border: 0;
+    height: 1px;
+    background: #333;
+    background-image: linear-gradient(to right, #ccc, #333, #ccc);
+}
+
+.clickable {
+   cursor: pointer;
+}
+
+.remove-row {
+    color: red;
+}
+
+.table-editable {
+    position: relative;
+}
+
+.table-editable {
+    font-size: 20px;
+}
+
+.table-remove {
+    color: #700;
+    cursor: pointer;
+}
+
+.table-remove:hover {
+    color: #f00;
+}
+
+.table-up, .table-down {
+    color: #007;
+    cursor: pointer;
+}
+
+.table-up:hover, .table-down:hover {
+    color: #00f;
+}
+
+.table-add {
+    color: #070;
+    cursor: pointer;
+    right: 0;
+}
+
+.result-randomize {
+    color: #070;
+    cursor: pointer;
+    top: 8px;
+    right: 0;
+
+}
+
+.table-add:hover {
+    color: #0b0;
+}
+
+.test-class {
+    background-color: #298A08;
+    color: blueviolet;
+}
+
+.result-randomize:hover {
+    color: #0b0;
+}
+
+.template {
+    display: none;
+}
+
+[contentEditable=true] {
+    #border: 1px solid grey;
+}
+
+[contentEditable=true]:empty:not(:focus):before {
+    content: attr(data-ph);
+    color: grey;
+    font-style: italic;
+}
