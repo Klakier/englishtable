@@ -41,3 +41,9 @@ jspm_packages
 
 
 public/lib/
+
+dist/
+
+typings/
+
+src/public/lib/

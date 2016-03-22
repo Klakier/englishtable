@@ -1,8 +1,8 @@
-shuffle = require('./shuffle.js');
+var shuffle = require('./shuffle.js');
 
-var splitArray = function (array, chunkSize) {
+var splitArray = function(array, chunkSize) {
     var result = [];
-    if(chunkSize === 0){
+    if (chunkSize === 0) {
         return result;
     }
 
@@ -14,13 +14,13 @@ var splitArray = function (array, chunkSize) {
     return result;
 };
 
-var separate = function (array) {
+var separate = function(array) {
     var result = {
         leftColumn: [],
         rightColumn: []
     };
 
-    array.forEach(function (element) {
+    array.forEach(function(element) {
         result.leftColumn.push(element.original);
         result.rightColumn.push(element.translated);
     });
@@ -28,32 +28,38 @@ var separate = function (array) {
     return result;
 };
 
-var mix = function (array) {
+var mix = function(array) {
     var separated = separate(array);
     var result = [];
 
     var leftMixed = shuffle(separated.leftColumn);
     var rightMixed = shuffle(separated.rightColumn);
     for (var i = 0; i < leftMixed.length; i++) {
-        result.push({left: leftMixed[i], right: rightMixed[i]});
+        result.push({
+            left: leftMixed[i],
+            right: rightMixed[i]
+        });
     }
 
     return result;
 };
 
-module.exports = function (dictionary, elementsPerPage) {
-    if(!dictionary) {
-        return []
+module.exports = function(dictionary, elementsPerPage) {
+    if (!dictionary) {
+        return [];
     }
 
-    if(dictionary.length === 0){
+    if (dictionary.length === 0) {
         return [];
     }
     var splited = splitArray(dictionary, elementsPerPage);
     var result = [];
 
     for (var i = 0; i < splited.length; i++) {
-        result.push({index: i, elements: mix(splited[i])});
+        result.push({
+            index: i,
+            elements: mix(splited[i])
+        });
     }
 
     return result;

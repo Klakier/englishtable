@@ -1,30 +1,51 @@
+/// <reference path="typings/main.d.ts" />
+
 var gulp = require('gulp'),
     nodemon = require('gulp-nodemon'),
     plumber = require('gulp-plumber'),
-    livereload = require('gulp-livereload');
+    livereload = require('gulp-livereload'),
+    babel = require('gulp-babel');
 
+gulp.task('babel-client-js', () => {
+    return gulp.src('./src/public/js/*.js')
+        .pipe(babel({
+            plugins: ['transform-es2015-modules-amd']
+        }))
+        .pipe(gulp.dest('./dist/public/js'));
+});
 
-gulp.task('inject', () => {
+gulp.task('babel-server-js', () => {
+    return gulp.src(['./**/*.js', '!./src/public/**/*.js'])
+        .pipe(babel({
+            plugins: ['transform-es2015-modules-commonjs']
+        }))
+        .pipe(gulp.dest('./dist/js'));
+});
+
+gulp.task('inject', ['babel-client-js'], () => {
     var wiredep = require('wiredep').stream;
     var inject = require('gulp-inject');
-    var injectSrc = gulp.src(['./public/css/*.css', './public/js/*.js'], {
+    var injectSrc = gulp.src(['./dist/public/css/*.css', './dist/public/js/*.js'], {
         read: false
     });
 
     var injectOptions = {
-        ignorePaht: 'public'
+        ignorePath: 'public'
     };
 
     var options = {
         bowerJson: require('./bower.json'),
-        directory: './public/lib',
-        ignorePath: '../public'
+        directory: './dist/public/lib',
+        ignorePath: '../public',
+        onError: function(err) {
+            console.error('Inject fail:' + err);
+        },
     };
 
-    return gulp.src('./views/**/*.handlebars')
+    return gulp.src('./src/views/**/*.handlebars')
         .pipe(wiredep(options))
         .pipe(inject(injectSrc, injectOptions))
-        .pipe(gulp.dest('./views'));
+        .pipe(gulp.dest('./dist/views'));
 });
 
 gulp.task('develop', ['inject'], function() {
