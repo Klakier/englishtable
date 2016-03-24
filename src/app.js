@@ -21,10 +21,10 @@ app.locals.ENV_DEVELOPMENT = env === 'development';
 // view engine setup
 
 app.engine('handlebars', exphbs({
-    defaultLayout: 'main',
-    partialsDir: ['views/partials/']
+    defaultLayout: __dirname + '/../public/views/layouts/main',
+    partialsDir: [__dirname+'/../public/views/partials/']
 }));
-app.set('views', path.join(__dirname, 'views'));
+app.set('views', path.join(__dirname, '../public/views'));
 app.set('view engine', 'handlebars');
 
 // app.use(favicon(__dirname + '/public/img/favicon.ico'));
@@ -34,7 +34,7 @@ app.use(bodyParser.urlencoded({
     extended: true
 }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, '../public')));
 
 app.use('/', routes);
 app.use('/users', users);

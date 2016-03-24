@@ -4,7 +4,8 @@ var gulp = require('gulp'),
     nodemon = require('gulp-nodemon'),
     plumber = require('gulp-plumber'),
     livereload = require('gulp-livereload'),
-    babel = require('gulp-babel');
+    babel = require('gulp-babel'),
+    webpack = require('webpack');
 
 gulp.task('babel-client-js', () => {
     return gulp.src('./src/public/js/*.js')
@@ -14,15 +15,24 @@ gulp.task('babel-client-js', () => {
         .pipe(gulp.dest('./dist/public/js'));
 });
 
+gulp.task('webpack', (callback) => {
+    webpack(require('./webpack.config.js'), (err, stats) => {
+        if (err) {
+            throw new gutil.PluginError('webpack', err);
+        }
+        callback();
+    });
+});
+
 gulp.task('babel-server-js', () => {
-    return gulp.src(['./**/*.js', '!./src/public/**/*.js'])
+    return gulp.src(['./src/**/*.js', '!./src/public/**/*.js'])
         .pipe(babel({
             plugins: ['transform-es2015-modules-commonjs']
         }))
         .pipe(gulp.dest('./dist/js'));
 });
 
-gulp.task('inject', ['babel-client-js'], () => {
+gulp.task('inject', ['webpack'], () => {
     var wiredep = require('wiredep').stream;
     var inject = require('gulp-inject');
     var injectSrc = gulp.src(['./dist/public/css/*.css', './dist/public/js/*.js'], {
@@ -42,16 +52,16 @@ gulp.task('inject', ['babel-client-js'], () => {
         },
     };
 
-    return gulp.src('./src/views/**/*.handlebars')
+    return gulp.src('./src/public/views/**/*.handlebars')
         .pipe(wiredep(options))
         .pipe(inject(injectSrc, injectOptions))
-        .pipe(gulp.dest('./dist/views'));
+        .pipe(gulp.dest('./dist/public/views'));
 });
 
-gulp.task('develop', ['inject'], function() {
+gulp.task('develop', ['babel-server-js','inject'], function() {
     livereload.listen();
     nodemon({
-        script: 'server',
+        script: './dist/js/server',
         ext: 'js handlebars',
         stdout: false
     }).on('readable', function() {

@@ -11,7 +11,7 @@ router.get('/', function(req, res) {
 });
 
 router.post('/', function(req, res) {
-    fs.readFile('views/partials/result-template.handlebars', 'utf8', function(err, rawTemplate) {
+    fs.readFile('../views/partials/result-template.handlebars', 'utf8', function(err, rawTemplate) {
         if (err) {
             return console.error(err);
         }
