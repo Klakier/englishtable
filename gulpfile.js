@@ -5,7 +5,18 @@ var gulp = require('gulp'),
     plumber = require('gulp-plumber'),
     livereload = require('gulp-livereload'),
     babel = require('gulp-babel'),
-    webpack = require('webpack');
+    webpack = require('webpack'),
+    watch = require('gulp-watch'),
+    gutil = require('gulp-util');
+
+gulp.task('liverealod', () => {
+    livereload.listen();
+    watch('./dist/**/*', {
+        readDelay: 2000
+    }, (event, filename) => {
+        livereload.changed(__dirname + '/dist');
+    });
+});
 
 gulp.task('babel-client-js', () => {
     return gulp.src('./src/public/js/*.js')
@@ -15,64 +26,76 @@ gulp.task('babel-client-js', () => {
         .pipe(gulp.dest('./dist/public/js'));
 });
 
-gulp.task('webpack', (callback) => {
+gulp.task('webpack', ['liverealod'], (callback) => {
+    console.log('task: webpack');
     webpack(require('./webpack.config.js'), (err, stats) => {
         if (err) {
-            throw new gutil.PluginError('webpack', err);
+            console.error('Web pack error' + err);
+            callback();
         }
-        callback();
+        //livereload.changed(__dirname + '/dist/public');
     });
 });
 
-gulp.task('babel-server-js', () => {
-    return gulp.src(['./src/**/*.js', '!./src/public/**/*.js'])
-        .pipe(babel({
-            plugins: ['transform-es2015-modules-commonjs']
-        }))
-        .pipe(gulp.dest('./dist/js'));
+gulp.task('babel-server-js', (cb) => {
+    console.log('Task babel-server-js');
+    watch(['./src/**/*.js', '!./src/public/**/*.js'], () => {
+        console.log('Task babel-server-js WATCH');
+        gulp.src(['./src/**/*.js', '!./src/public/**/*.js'])
+            .pipe(babel({
+                plugins: ['transform-es2015-modules-commonjs']
+            }))
+            .pipe(gulp.dest('./dist/js'));
+    });
 });
 
-gulp.task('inject', ['webpack'], () => {
+gulp.task('watch', () => {
+    watch('./src/public/views/**/*.handlebars', () => {});
+});
+
+gulp.task('inject', () => {
     var wiredep = require('wiredep').stream;
     var inject = require('gulp-inject');
-    var injectSrc = gulp.src(['./dist/public/css/*.css', './dist/public/js/*.js'], {
-        read: false
-    });
-
-    var injectOptions = {
-        ignorePath: 'public'
-    };
 
     var options = {
         bowerJson: require('./bower.json'),
         directory: './dist/public/lib',
-        ignorePath: '../public',
+        ignorePath: '../../../../dist/public/',
         onError: function(err) {
             console.error('Inject fail:' + err);
         },
     };
-
     return gulp.src('./src/public/views/**/*.handlebars')
         .pipe(wiredep(options))
-        .pipe(inject(injectSrc, injectOptions))
         .pipe(gulp.dest('./dist/public/views'));
 });
 
-gulp.task('develop', ['babel-server-js','inject'], function() {
-    livereload.listen();
+gulp.task('develop', ['babel-server-js', 'inject'], function() {
     nodemon({
         script: './dist/js/server',
-        ext: 'js handlebars',
+        tasks: ['inject', 'webpack'],
+        ignore: ['dist/*'],
+        watch: [__dirname + '/dist/js'],
+        ext: 'js',
         stdout: false
-    }).on('readable', function() {
-        this.stdout.on('data', function(chunk) {
-            if (/^Express server listening on port/.test(chunk)) {
-                livereload.changed(__dirname);
-            }
-        });
-        this.stdout.pipe(process.stdout);
-        this.stderr.pipe(process.stderr);
+    }).on('restart', function(files) {
+        console.log('liverealod!!');
+        livereload.changed(__dirname);
     });
+});
+
+gulp.task('monitor', () => {
+    nodemon({
+        script: './dist/js/server',
+        watch: './dist/js/',
+        ext: 'js',
+        delay: 1000,
+        stdout: false
+    });
+});
+
+gulp.task('foo', ['inject', 'babel-server-js', 'webpack', 'monitor', 'liverealod'], () => {
+    console.log('do nothing');
 });
 
 gulp.task('default', [

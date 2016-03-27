@@ -2,7 +2,7 @@
 require('../css/table.css');
 
 $(document).ready(function() {
-
+    
     var $TABLE = $('#table');
     var $SHUFFLE_BTN = $('#shuffle');
     var $ELEMENTS_PER_PAGE_VALUE = $('#elements-per-page-value')
