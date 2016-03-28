@@ -7,55 +7,35 @@ var gulp = require('gulp'),
     babel = require('gulp-babel'),
     webpack = require('webpack'),
     watch = require('gulp-watch'),
-    gutil = require('gulp-util');
+    gutil = require('gulp-util'),
+    rimraf = require('rimraf'),
+    bower = require('gulp-bower');
 
-gulp.task('liverealod', () => {
-    livereload.listen();
-    watch('./dist/**/*', {
-        readDelay: 2000
-    }, (event, filename) => {
-        livereload.changed(__dirname + '/dist');
-    });
+gulp.task('clean', (cb) => {
+    rimraf('./dist', cb);
 });
 
-gulp.task('babel-client-js', () => {
-    return gulp.src('./src/public/js/*.js')
-        .pipe(babel({
-            plugins: ['transform-es2015-modules-amd']
-        }))
-        .pipe(gulp.dest('./dist/public/js'));
-});
-
-gulp.task('webpack', ['liverealod'], (callback) => {
-    console.log('task: webpack');
-    webpack(require('./webpack.config.js'), (err, stats) => {
+gulp.task('webpack', () => {
+    gutil.log(gutil.colors.yellow('Start task webpack'));
+    var options = require('./webpack.config.js');
+    webpack(options, (err, stats) => {
         if (err) {
             console.error('Web pack error' + err);
-            callback();
         }
-        //livereload.changed(__dirname + '/dist/public');
     });
 });
 
 gulp.task('babel-server-js', (cb) => {
-    console.log('Task babel-server-js');
-    watch(['./src/**/*.js', '!./src/public/**/*.js'], () => {
-        console.log('Task babel-server-js WATCH');
-        gulp.src(['./src/**/*.js', '!./src/public/**/*.js'])
-            .pipe(babel({
-                plugins: ['transform-es2015-modules-commonjs']
-            }))
-            .pipe(gulp.dest('./dist/js'));
-    });
-});
-
-gulp.task('watch', () => {
-    watch('./src/public/views/**/*.handlebars', () => {});
+    return gulp.src(['./src/**/*.js', '!./src/public/**/*.js'])
+        .pipe(babel({
+            plugins: ['transform-es2015-modules-commonjs'],
+            sourceMaps: 'both'
+        }))
+        .pipe(gulp.dest('./dist'));
 });
 
 gulp.task('inject', () => {
     var wiredep = require('wiredep').stream;
-    var inject = require('gulp-inject');
 
     var options = {
         bowerJson: require('./bower.json'),
@@ -65,39 +45,56 @@ gulp.task('inject', () => {
             console.error('Inject fail:' + err);
         },
     };
-    return gulp.src('./src/public/views/**/*.handlebars')
+    return gulp.src('./src/**/*.handlebars')
         .pipe(wiredep(options))
-        .pipe(gulp.dest('./dist/public/views'));
-});
-
-gulp.task('develop', ['babel-server-js', 'inject'], function() {
-    nodemon({
-        script: './dist/js/server',
-        tasks: ['inject', 'webpack'],
-        ignore: ['dist/*'],
-        watch: [__dirname + '/dist/js'],
-        ext: 'js',
-        stdout: false
-    }).on('restart', function(files) {
-        console.log('liverealod!!');
-        livereload.changed(__dirname);
-    });
+        .pipe(gulp.dest('./dist/'));
 });
 
 gulp.task('monitor', () => {
+    livereload.listen();
+    watch('./src/**/*.handlebars', () => {
+        gulp.start('inject');
+    });
+
+    watch(['./src/**/*.js', '!./src/public/**/*.js'], () => {
+        gulp.start('babel-server-js');
+    });
+
+    watch(['./src/public/**/*.js', './src/public/**/*.css'], () => {
+        gutil.log(gutil.colors.yellow('Start web pack task'));
+        gulp.start('webpack');
+    });
+
+    watch('./dist/**/*', {
+        readDelay: 2000
+    }, (event, filename) => {
+        livereload.changed(__dirname + '/dist');
+    });
+
     nodemon({
-        script: './dist/js/server',
-        watch: './dist/js/',
+        script: './dist/server',
+        ignore: './dist/public/',
+        watch: './dist/',
         ext: 'js',
         delay: 1000,
-        stdout: false
+        stdout: true
     });
 });
 
-gulp.task('foo', ['inject', 'babel-server-js', 'webpack', 'monitor', 'liverealod'], () => {
-    console.log('do nothing');
+gulp.task('build', ['inject', 'babel-server-js', 'webpack']);
+
+gulp.task('bower', () => {
+    return bower();
 });
 
+gulp.task('rebuild', ['clean'], () => {
+    bower().on('end', () => {
+        gulp.start('build');
+    });
+});
+
+gulp.task('develop', ['build', 'monitor']);
+
 gulp.task('default', [
-    'develop'
+    'build'
 ]);

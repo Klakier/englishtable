@@ -1,25 +1,28 @@
 /// <reference path="../../../typings/main.d.ts" />
 require('../css/table.css');
+require('../css/mainStyle.css');
+require('bootstrap-notify');
+
+var $ = require('jquery');
 
 $(document).ready(function() {
-    
     var $TABLE = $('#table');
-    var $SHUFFLE_BTN = $('#shuffle');
-    var $ELEMENTS_PER_PAGE_VALUE = $('#elements-per-page-value')
-    var $ROW_TEMPLATE = $TABLE.find('tr.template');
+    var $shuffleBtn = $('#shuffle');
+    var $elementsPerPageValue = $('#elements-per-page-value');
+    var $rowTemplate = $TABLE.find('tr.template');
 
-    $ROW_TEMPLATE.find('.remove-row').click(function() {
+    $rowTemplate.find('.remove-row').click(function() {
         $(this).parents('tr').detach();
-    })
+    });
 
     $('.options li > a').click(function() {
         var value = $(this).html();
-        $ELEMENTS_PER_PAGE_VALUE.html(value);
-    })
+        $elementsPerPageValue.html(value);
+    });
 
     $('.table-add').click(function() {
-        var $clone = $ROW_TEMPLATE.clone(true).removeClass('template table-line');
-        $clone.addClass("items")
+        var $clone = $rowTemplate.clone(true).removeClass('template table-line');
+        $clone.addClass('items');
         $TABLE.find('table').append($clone);
     });
 
@@ -28,8 +31,8 @@ $(document).ready(function() {
     });
 
     // A few jQuery helpers for exporting only
-    jQuery.fn.pop = [].pop;
-    jQuery.fn.shift = [].shift;
+    $.fn.pop = [].pop;
+    $.fn.shift = [].shift;
 
     var extractDictionary = function() {
         var $rows = $TABLE.find('tr:not(:hidden)');
@@ -59,7 +62,7 @@ $(document).ready(function() {
     };
 
     var getElementsPerPage = function() {
-        return parseInt($ELEMENTS_PER_PAGE_VALUE.html());
+        return parseInt($elementsPerPageValue.html());
     };
 
     var getColumnNames = function() {
@@ -81,7 +84,7 @@ $(document).ready(function() {
         return result;
     };
 
-    $SHUFFLE_BTN.click(function() {
+    $shuffleBtn.click(function() {
         var dictionary = extractDictionary();
         var elementsPerPage = getElementsPerPage();
         var columnNames = getColumnNames();
@@ -100,7 +103,7 @@ $(document).ready(function() {
             error: function(jqHXR, textStatus, errorThrown) {
                 $.notify({
                     icon: 'material-icons error',
-                    title: "Internal error occurs.",
+                    title: 'Internal error occurs.',
                     message: textStatus + errorThrown
                 }, {
                     type: 'danger',
@@ -108,11 +111,9 @@ $(document).ready(function() {
                         '<span class="material-icons">error</span>' +
                         '<span data-notify="title">{1}</span>' +
                         '<div data-notify="message">{2}</div>' +
-                        "</div>"
-                })
-
+                        '</div>'
+                });
             }
         });
     });
-
 });

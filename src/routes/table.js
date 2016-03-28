@@ -1,36 +1,25 @@
-var express = require('express');
-var fs = require('fs');
-var handlebars = require('handlebars');
-var transformation = require('../Utils/itemsTransformation.js');
+import readFile from 'fs';
+import express from 'express';
+import handlebars from 'express-handlebars';
+import * as transformation from '../Utils/itemsTransformation';
+import * as tableController from '../controllers/table/tableIndex';
 
-var router = express.Router();
+export var app = express();
 
 /* GET users listing. */
-router.get('/', function(req, res) {
-    res.render('table', {});
-});
-router.post('/', function(req, res) {
-    console.log('dd');
-    fs.readFile('../views/partials/result-template.handlebars', 'utf8', function(err, rawTemplate) {
-        if (err) {
-            return console.error(err);
-        }
+app.get('/', tableController.index);
 
-        var data = transformation(req.body.dictionary, req.body.elementsPerPage);
-        var template = handlebars.compile(rawTemplate);
-        var view = template({
-            items: data,
-            columnNames: req.body.columnNames
-        });
+app.post('/', tableController.getResult);
 
-        res.append('Content-Type', 'text/html');
-        res.send(view);
-    });
-});
-
-router.post('/print', function(req, res) {
+app.post('/print', function(req, res) {
     res.append('Content-Type', 'text/html');
     res.send('<div>foobar</div>');
 });
 
-module.exports = router;
+app.engine('handlebars', handlebars({
+    defaultLayout: __dirname + '/../views/layouts/main',
+    partialsDir: [__dirname + '/../controllers/table/views/partials']
+}));
+
+app.set('view engine', 'handlebars');
+app.set('views', __dirname + '/../controllers/table/views');

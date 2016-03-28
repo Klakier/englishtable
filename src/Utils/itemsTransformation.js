@@ -44,7 +44,7 @@ var mix = function(array) {
     return result;
 };
 
-module.exports = function(dictionary, elementsPerPage) {
+export function transform(dictionary, elementsPerPage) {
     if (!dictionary) {
         return [];
     }
@@ -63,4 +63,4 @@ module.exports = function(dictionary, elementsPerPage) {
     }
 
     return result;
-};
+}
