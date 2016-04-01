@@ -3,7 +3,7 @@ var webpack = require('webpack');
 
 module.exports = {
     entry: {
-        table: './src/public/js/table'
+        'table-index': './src/public/js/table-index'
     },
     output: {
         path: 'dist/public',

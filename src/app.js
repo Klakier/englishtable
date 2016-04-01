@@ -9,7 +9,7 @@ var exphbs = require('express-handlebars');
 
 var routes = require('./routes/index');
 var users = require('./routes/user');
-import * as table from './routes/table';
+import * as table from './routes/table-route';
 
 var app = express();
 
