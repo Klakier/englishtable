@@ -8,6 +8,9 @@ import * as textboxInput from './table-textbox-input';
 
 var $ = require('jquery');
 var inputMethod = tableInput;
+var test = {
+    table: tableInput
+};
 
 var showError = (status, errorText) => {
     $.notify({
@@ -24,29 +27,36 @@ var showError = (status, errorText) => {
     });
 };
 
-var switchInput = (url,newInputMethod) => {
-    var data = inputMethod.getData($);
-    $.ajax({
-        method: 'POST',
-        url: url,
-        data: {
-            dataType: inputMethod.getName(),
-            data: inputMethod.getData($)
-        },
-        dataType: 'html',
-        success: (result) => {
-            $('#input').html(result);
-            newInputMethod.registerEvents($);
-            inputMethod = newInputMethod;
-        },
-        error: (jqHXR, textStatus, errorThrown) => {
-            showError(textStatus, errorThrown);
-        }
-    });
+var switchInput = (url, currentInputMethod, newInputMethod) => {
+    return new Promise((resolve, reject) =>
+        $.ajax({
+            method: 'POST',
+            url: url,
+            data: {
+                dataType: currentInputMethod.getName(),
+                data: currentInputMethod.getData($)
+            },
+            dataType: 'html',
+            success: (result) => {
+                inputMethod = newInputMethod;
+                $('#input').html(result);
+                newInputMethod.activate($);
+                resolve(result);
+            },
+            error: (jqHXR, textStatus, errorThrown) => {
+                showError(textStatus, errorThrown);
+                reject(textStatus);
+            }
+        }));
+};
+
+var activeteTab = (tab) => {
+    $('.nav-tabs > li').removeClass('active');
+    $(tab).addClass('active');
 };
 
 $(document).ready(() => {
-    inputMethod = tableInput.registerEvents($);
+    tableInput.activate($);
     var $TABLE = $('#table');
     var $shuffleBtn = $('#shuffle');
     var $elementsPerPageValue = $('#elements-per-page-value');
@@ -78,16 +88,18 @@ $(document).ready(() => {
         return result;
     };
 
-    $('#table-input-tab').click(() => {
-        switchInput('table//input/table', tableInput);
+    $('#table-input-tab').click((event) => {
+        switchInput('table//input/table', inputMethod, tableInput)
+            .then(() => activeteTab(event.target.parentElement));
     });
 
-    $('#table-input-textbox').click(() => {
-        switchInput('table/input/textbox', textboxInput);
+    $('#table-input-textbox').click((event) => {
+        switchInput('table/input/textbox', inputMethod, textboxInput)
+            .then(() => activeteTab(event.target.parentElement));
     });
 
     $shuffleBtn.click(function() {
-        var dictionary = tableInput.getData($);
+        var dictionary = inputMethod.getData($);
         var elementsPerPage = getElementsPerPage();
         var columnNames = getColumnNames();
         $.ajax({

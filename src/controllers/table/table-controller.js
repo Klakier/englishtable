@@ -2,7 +2,9 @@ import * as fs from 'fs';
 import Router from 'express';
 import * as handlebars from 'handlebars';
 import * as itemsTransformation from './../../Utils/itemsTransformation';
-import * as modelTransformation from './js/model-transformation.js';
+import * as modelTransformation from './../../Utils/model-transformation';
+import * as objectInspection from './../../Utils/objectInspections';
+import logger from '../../logger';
 
 var generateView = (viewPath, callback) => {
     fs.readFile(__dirname + viewPath, 'utf8', function(err, rawTemplate) {
@@ -17,7 +19,7 @@ var generateView = (viewPath, callback) => {
 };
 
 export function index(req, res) {
-    res.render('table.handlebars');
+    res.render('table.handlebars', {});
 }
 
 export function getResult(req, res) {
@@ -34,16 +36,36 @@ export function getResult(req, res) {
 
 export function tableInput(req, res) {
     generateView('/views/table-input.handlebars', (err, view) => {
-        var model = modelTransformation.toTable(req.body.data);
+        var data = (req.body.data) ? req.body.data : [];
+        if (!objectInspection.isArray(data)) {
+            res.send('Error');
+            return;
+        }
+
+        var model = {
+            rows: data
+        };
+
         res.append('Content-Type', 'text/html');
+
+        logger.debug('Render view table-input with model', model);
         res.send(view(model));
     });
 }
 
 export function textboxInput(req, res) {
     generateView('/views/textbox-input.handlebars', (err, view) => {
-        var model = modelTransformation.toText(req.body.data);
+        var data = (req.body.data) ? req.body.data : [];
+        if (!objectInspection.isArray(data)) {
+            res.send('Error');
+            return;
+        }
+
+        var model = modelTransformation.toText(data);
         res.append('Content-Type', 'text/html');
-        res.send(view(model));
+        logger.debug('Render view textbox-input with model', model);
+        res.send(view({
+            text: model
+        }));
     });
 }

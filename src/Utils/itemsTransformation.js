@@ -21,8 +21,8 @@ var separate = function(array) {
     };
 
     array.forEach(function(element) {
-        result.leftColumn.push(element.original);
-        result.rightColumn.push(element.translated);
+        result.leftColumn.push(element.left);
+        result.rightColumn.push(element.right);
     });
 
     return result;

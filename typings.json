@@ -8,6 +8,7 @@
     "gulp": "registry:dt/gulp#3.8.0+20160316155526",
     "gulp-util": "registry:dt/gulp-util#0.0.0+20160316155526",
     "jquery": "registry:dt/jquery#1.10.0+20160316155526",
-    "node": "registry:dt/node#4.0.0+20160319033040"
+    "node": "registry:dt/node#4.0.0+20160319033040",
+    "winston": "registry:dt/winston#0.0.0+20160324163241"
   }
 }

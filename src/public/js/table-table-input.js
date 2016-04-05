@@ -1,3 +1,5 @@
+/// <reference path="../../../typings/main.d.ts" />
+
 export function getName() {
     return 'table';
 }
@@ -14,22 +16,24 @@ export function getData($) {
 
     // Turn all existing rows into a loopable array
     $rows.each(function() {
-        var $td = $(this).find('td');
-        var h = {};
+        var $td = $(this).find('td:not(:empty)');
+        var left = $td.first();
+        var right = $td.eq(1);
+        var h = {
+            left: left.text().trim(),
+            right: right.text().trim()
+        };
 
-        // Use the headers from earlier to name our hash keys
-        headers.forEach(function(header, i) {
-            h[header] = $td.eq(i).text().trim();
-        });
-
-        data.push(h);
+        if (h.left !== '' || h.right !== '') {
+            data.push(h);
+        }
     });
 
     // Output the result
     return data;
 }
 
-export function registerEvents($) {
+export function activate($) {
     var $table = $('#table');
     var $rowTemplate = $table.find('tr.template');
 

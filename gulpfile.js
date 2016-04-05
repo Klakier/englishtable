@@ -60,7 +60,7 @@ gulp.task('monitor', () => {
         gulp.start('babel-server-js');
     });
 
-    watch(['./src/public/**/*.js', './src/public/**/*.css'], () => {
+    watch(['./src/public/**/*.js', './src/Utils/**/*.js', './src/public/**/*.css'], () => {
         gutil.log(gutil.colors.yellow('Start web pack task'));
         gulp.start('webpack');
     });
@@ -77,7 +77,8 @@ gulp.task('monitor', () => {
         watch: './dist/',
         ext: 'js',
         delay: 1000,
-        stdout: true
+        stdout: true,
+        debug: true
     });
 });
 
