@@ -1,0 +1,70 @@
+<!-- Based on: http://codepen.io/ashblue/pen/mCtuA -->
+<script src="table-index.bundle.js"></script>
+<link href="table-index.css" rel="stylesheet">
+<div class="container">
+    <div class="not-printable">
+        <ul class="nav nav-tabs">
+            <li role="presentation" class="active">
+                <a id="table-input-tab" href="#"><span class="glyphicon glyphicon-subtitles" /></a>
+            </li>
+            <li class="presentation">
+                <a id="table-input-textbox" href="#"><span class="glyphicon glyphicon-th-list" /></a>
+            </li>
+        </ul>
+
+        <div id="input">
+            {{> table-input }}
+        </div>
+
+        <div class="row small-space-at-bottom">
+            <div class="options col-md-offset-3 col-md-3">
+                <span>Elements per page:</span>
+                <div class="btn-group">
+                    <a type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                        <span id='elements-per-page-value'>15</span> <span class="caret" />
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a>10</a></li>
+                        <li><a>15</a></li>
+                        <li><a>20</a></li>
+                        <li><a>25</a></li>
+                        <li><a>30</a></li>
+                        <li><a>35</a></li>
+                        <li><a>40</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-offset-3 col-md-2">
+                <span>Columns names:</span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-offset-4">
+                <div>
+                    <span>1:</span> <input class="column-name-input" type="text" placeholder="original word" />
+                </div>
+                <div>
+                    <span>2:</span> <input class="column-name-input" type="text" placeholder="left ordinary number" />
+                </div>
+                <div>
+                    <span>3:</span> <input class="column-name-input" type="text" placeholder="" />
+                </div>
+                <div>
+                    <span>4:</span> <input class="column-name-input" type="text" placeholder="right ordinary number" />
+                </div>
+                <div>
+                    <span>5:</span> <input class="column-name-input" type="text" placeholder="translated word" />
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-offset-7 col-md-1">
+                <span id="shuffle" class="material-icons standard-btn">done</span>
+            </div>
+        </div>
+    </div>
+
+    <div id="result"></div>
+</div>

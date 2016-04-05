@@ -1,0 +1,45 @@
+<div class="not-printable table-input">
+    <div class="row">
+        <div class="col-md-offset-3 col-md-1">
+            <span class="table-add material-icons">add box</span>
+        </div>
+        <div class="col-md-6">
+            <div id="table">
+                <table class="table">
+                    <tbody>
+                        <tr>
+                            <th>Original</th>
+                            <th>Translated</th>
+                            <th></th>
+                        </tr>
+                        {{#each rows}}
+                        <tr>
+                            <td>
+                                <div class="source-word" contenteditable="true" data-ph="Original word">{{left}}</div>
+                            </td>
+                            <td>
+                                <div class="destination-word" contenteditable="true" data-ph="Translated word">{{right}}</div>
+                            </td>
+                            <td>
+                                <span class="remove-row clickable material-icons">delete</span>
+                            </td>
+                        </tr>
+                        {{/each}}
+                        <tr class="template">
+                            <td>
+                                <div class="source-word" contenteditable="true" data-ph="Original word"></div>
+                            </td>
+                            <td>
+                                <div class="destination-word" contenteditable="true" data-ph="Translated word"></div>
+                            </td>
+                            <td>
+                                <span class="remove-row clickable material-icons">delete</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+</div>
