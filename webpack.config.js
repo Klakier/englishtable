@@ -31,6 +31,8 @@ module.exports = {
     resolve: {},
     externals: {
         'jquery': 'jQuery',
+        'react': 'React',
+        'react-dom': 'ReactDOM',
     },
     devtool: 'source-map'
 };

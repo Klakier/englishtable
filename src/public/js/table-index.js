@@ -3,8 +3,11 @@ require('../css/table-index.css');
 require('../css/mainStyle.css');
 require('bootstrap-notify');
 
+
 import * as tableInput from './table-table-input';
 import * as textboxInput from './table-textbox-input';
+import * as configuration from './table-configuration.react';
+import * as ReactDom from 'react-dom';
 
 var $ = require('jquery');
 var inputMethod = tableInput;
@@ -119,4 +122,5 @@ $(document).ready(() => {
             }
         });
     });
+    ReactDom.render( <configuration.columnConfiguration />, document.getElementById('ReactTest'));
 });

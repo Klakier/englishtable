@@ -47,3 +47,6 @@ dist/
 typings/
 
 src/public/lib/
+
+#vim
+*.swp
