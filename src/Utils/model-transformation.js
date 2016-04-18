@@ -9,6 +9,7 @@ var isString = (value) => {
 var splitWithoutEmptyEntries = (array, separtor) => {
     return array.split(separtor).filter(v => v);
 };
+
 var tryDeduceSeparator = (value) => {
     var result = [];
     let matches = value.match(/(\s+)/g);

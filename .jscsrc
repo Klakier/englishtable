@@ -1,5 +1,8 @@
 {
     "excludeFiles": ["node_modules/**", "bower_components/**"],
+    
+    "preset" : "airbnb",
+    //"esprima" : "esprima-fb",
 
     "requireCurlyBraces": [
         "if",

@@ -11,6 +11,11 @@
     "jquery": "registry:dt/jquery#1.10.0+20160316155526",
     "node": "registry:dt/node#4.0.0+20160330064709",
     "react": "registry:dt/react#0.14.0+20160319053454",
+    "react-redux": "registry:dt/react-redux#4.4.0+20160406115600",
+    "redux": "registry:dt/redux#3.3.1+20160326112656",
     "winston": "registry:dt/winston#0.0.0+20160324163241"
+  },
+  "ambientDependencies": {
+    "redux-logger": "registry:dt/redux-logger#2.6.0+20160316155526"
   }
 }

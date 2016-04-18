@@ -27,9 +27,11 @@ gulp.task('webpack', () => {
 
 gulp.task('babel-server-js', (cb) => {
     return gulp.src(['./src/**/*.js', '!./src/public/**/*.js'])
+        .on('error', err => {console.log(err);})
         .pipe(babel({
             plugins: ['transform-es2015-modules-commonjs'],
-            sourceMaps: 'both'
+            sourceMaps: 'both',
+            filename: 'babel-errors'
         }))
         .pipe(gulp.dest('./dist'));
 });
