@@ -2,8 +2,9 @@
 
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { textInputChanged,  inputAccepted } from './../actions';
-import TextInput from './../components/TextInput';
+
+import { configurationColumnTypeChanged, configurationColumnNameChanged} from './../reducers/input';
+import InputTabs from './../components/InputTabs';
 
 const mapStateToProps = (state, ownProps) => {
     return {
@@ -12,17 +13,21 @@ const mapStateToProps = (state, ownProps) => {
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => {
-    return { 
-        onInputAccepted: () => dispatch(inputAccepted()),
-        onChange: (text) => dispatch(textInputChanged(text))
+    return {
+        onTabChanged: (selectedTab, previousTab) => {
+            console.log(`Selected tab: ${selectedTab}, previous tab: ${previousTab}.`);
+        },
+
+        onTextInputChanged: (input) => console.log(`New text input ${input}.`),
+
+        onTableInputChanged: (input) => console.log(`New text input ${input}.`),
     };
 };
-
 
 const Input = connect(
     mapStateToProps,
     mapDispatchToProps
-)(TextInput);
+)(InputTabs);
 
 export default Input;
 

@@ -1,20 +1,17 @@
 import React, { PropTypes } from 'react';
-import Btn from './Button';
 
-const TextInput = ({ onChange, onInputAccepted }) => {
+const TextInput = ({ onInputChanged }) => {
     return (
-    <div>
         <div>
-            <textarea onChange={e => onChange(e.target.value)} />
+            <div>
+                <textarea onChange={e => onInputChanged(e.target.value)} />
+            </div>
         </div>
-        <Btn content={'Accept'} onClick={onInputAccepted} />
-    </div>
     );
 };
 
 TextInput.propTypes = {
-  onChange: PropTypes.func.isRequired,
-  onInputAccepted: PropTypes.func.isRequired
-}
+    onInputChanged: PropTypes.func.isRequired,
+};
 
 export default TextInput;

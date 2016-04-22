@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 import Table from './../components/Table';
 import {toArray} from './../../../Utils/conversions';
 
-import {configurationChanged} from './../actions';
+import {configurationColumnTypeChanged, configurationColumnNameChanged} from './../reducers/configuration';
 
 const mapStateToProps = (state, ownProps) => {
     return {
@@ -13,7 +13,8 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
     return { 
-        onHeaderChanged: (data) => dispatch(configurationChanged(data.columnId, data.optionId)),
+        onOptionChanged: (data) => dispatch(configurationColumnTypeChanged(data.columnId, data.optionId)),
+        onColumnNameChanged: (id, name) => dispatch(configurationColumnNameChanged(id, name)),
     };
 };
 

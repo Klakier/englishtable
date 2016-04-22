@@ -8,6 +8,10 @@
     }
 }
 
+.column-name-input {
+    max-width: 70px
+}
+
 hr {
     border: 0;
     height: 1px;

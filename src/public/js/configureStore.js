@@ -1,12 +1,13 @@
 import { createStore, applyMiddleware, compose } from 'redux';
 import createLogger from 'redux-logger';
-import tableApp from './reducers';
+import tableApp from './reducer';
 
 const loggerMiddleware = createLogger();
 
 export default function configureStore() {
     return createStore(
-        tableApp, {},
+        tableApp, 
+        {},
         compose(
             applyMiddleware( loggerMiddleware ),
             window.devToolsExtension ? window.devToolsExtension() : f => f

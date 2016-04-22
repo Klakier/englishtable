@@ -12,6 +12,7 @@ export default class TableApp extends Component {
             <div>
                 <Header header={"HEADER"} />
                 <Input />
+                <hr/>
                 <Configuration />
             </div>
         );

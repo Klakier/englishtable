@@ -4,20 +4,24 @@ import React, { PropTypes } from 'react';
 import BtnWithOptions from './ButtonWithOptions';
 import * as objectInspection from './../../../Utils/objectInspections';
 
-const Table = ({ headers, rows, onHeaderChanged }) => {
+const Table = ({headers, rows, onOptionChanged, onColumnNameChanged}) => {
     let optionChanged = (columnId) => {
         return (optionId) => {
-            console.log('change' + columnId + optionId);
-            onHeaderChanged({
+            onOptionChanged({
                 columnId: columnId,
                 optionId: optionId
             });
         };
     };
     
-    let tableHeaderColumn = headers.map( (h) => {
+    let tableHeaderColumn = headers.map((h) => {
+        let handleColumnNameChanged = (text) => {
+            onColumnNameChanged(h.key, text);
+        };
+        
         return (
         <th key={h.key}>
+            <input className="column-name-input" type="text" placeholder="column name" onChange={(e) => handleColumnNameChanged(e.target.value)}/>
             <BtnWithOptions selectedOption={h.selectedOption} options={h.options} onChanged={optionChanged(h.key)} />
         </th>
         );
@@ -26,7 +30,7 @@ const Table = ({ headers, rows, onHeaderChanged }) => {
     let children = [];
     
     return (
-        <table>
+        <table className="table">
             <thead>
                 <tr>
                     {tableHeaderColumn}
@@ -38,7 +42,6 @@ const Table = ({ headers, rows, onHeaderChanged }) => {
         </table>
     );
 };
-
 
 /*const Table = () => {
     return (
