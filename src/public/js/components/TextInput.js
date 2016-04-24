@@ -11,7 +11,7 @@ const TextInput = ({ onInputChanged }) => {
 };
 
 TextInput.propTypes = {
-    onInputChanged: PropTypes.func.isRequired,
+    onInputChanged: PropTypes.any.isRequired
 };
 
 export default TextInput;

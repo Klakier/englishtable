@@ -23,7 +23,7 @@ export const configurationColumnNameChanged = createAction(
     (columnId, name) => {
         return {
             columnId,
-            name,
+            name
         };
     });
 

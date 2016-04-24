@@ -1,10 +1,10 @@
 import configurationReducer from './reducers/configuration';
-import inputReducer from './reducers/input';
+import dictionaryReducer from './reducers/dictionary';
 
 export function tableApp(state, action) {
     return {
-        input: inputReducer(state.input, action),
-        configuration: configurationReducer(state.configuration, action)
+        dictionary: dictionaryReducer(state.dictionary, action),
+        configuration: configurationReducer(state.configuration, action),
     };
 }
 

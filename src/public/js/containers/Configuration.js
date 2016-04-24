@@ -4,10 +4,27 @@ import {toArray} from './../../../Utils/conversions';
 
 import {configurationColumnTypeChanged, configurationColumnNameChanged} from './../reducers/configuration';
 
+const toRows = (sourceWords, destinationWords) => {
+    if(sourceWords.length !== destinationWords.length) {
+        throw 'Source words collection has different size then destination words collection';
+    }
+    
+    let result = [];
+    for(let i = 0; i<sourceWords.length; i++) {
+        result.push({
+            no: i +1,
+            sourceWord: sourceWords[i],
+            destinationWord: destinationWords[i]
+        });
+    }
+    
+    return result;
+};
+
 const mapStateToProps = (state, ownProps) => {
     return {
         headers: toArray(state.configuration, 'key'),
-        rows: []
+        rows: toRows(state.dictionary.output.sourceWords,state.dictionary.output.destinationWords)
     };
 };
 

@@ -1,18 +1,26 @@
 /// <reference path="./../../../../typings/main.d.ts" />
 
-import React, { Component, PropTypes } from 'react';
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 
-import { configurationColumnTypeChanged, configurationColumnNameChanged} from './../reducers/input';
+import {
+    newRowAdded,
+    rowRemoved,
+    tableInputChanged
+} from '../reducers/dictionary';
 import InputTabs from './../components/InputTabs';
 
-const mapStateToProps = (state, ownProps) => {
+const mapStateToProps = (state) => {
+    for(let key of Object.keys(state)) {
+        console.log(key);
+    }
+    console.log(state);
+    console.log(state.dictionary.input);
     return {
-        text: state.inputText,
+        items: state.dictionary.input
     };
 };
 
-const mapDispatchToProps = (dispatch, ownProps) => {
+const mapDispatchToProps = (dispatch) => {
     return {
         onTabChanged: (selectedTab, previousTab) => {
             console.log(`Selected tab: ${selectedTab}, previous tab: ${previousTab}.`);
@@ -20,7 +28,14 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 
         onTextInputChanged: (input) => console.log(`New text input ${input}.`),
 
-        onTableInputChanged: (input) => console.log(`New text input ${input}.`),
+        onTableInputChanged: (rowId, sourceWord, destinationWord) => {
+            console.log(`New text input ${sourceWord}, ${destinationWord}.`);
+            dispatch(tableInputChanged({rowId, sourceWord, destinationWord}));
+        },
+
+        onRemoveRowBtnClicked : (rowId) => dispatch(rowRemoved({rowId})),
+
+        onNewRowBtnClicked: () => dispatch(newRowAdded())
     };
 };
 

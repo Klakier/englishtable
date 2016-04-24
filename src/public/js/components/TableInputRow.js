@@ -1,26 +1,42 @@
 /// <reference path="./../../../../typings/main.d.ts" />
 
-import React, { PropTypes, Component } from 'react';
+import React, {PropTypes, Component} from 'react';
 import Button from './Button';
 
 export class TableInputRow extends Component {
+    onSourceWordChanged(e) {
+        const {onInputChanged, destinationWord} = this.props;
+        onInputChanged(e.target.value, destinationWord);
+    }
+
+    onDestinationWordChanged(e) {
+        const {onInputChanged, sourceWord} = this.props;
+        onInputChanged(sourceWord, e.target.value);
+    }
+
     render() {
         const {sourceWord, destinationWord, onRemoveBtnClicked}=this.props;
-        
+
         return (
             <tr>
                 <td>
-                    <div className="source-word" contentEditable="true" data-ph="Original word">
-                        {sourceWord}
-                    </div>
+                    <input
+                        className="source-word"
+                        type="textbox"
+                        data-ph="Orginal word"
+                        onChange={e => this.onSourceWordChanged(e)}
+                        value={sourceWord}/>
                 </td>
                 <td>
-                    <div className="destination-word" contentEditable="true" data-ph="Translted word">
-                        {destinationWord}
-                    </div>
+                    <input
+                        className="destination-word"
+                        type="textbox"
+                        data-ph="Transalted word"
+                        onChange={e => this.onDestinationWordChanged(e)}
+                        value={destinationWord}/>
                 </td>
                 <td>
-                    <Button onClick={onRemoveBtnClicked} content={"delete"} />
+                    <Button onClick={onRemoveBtnClicked} content={"delete"}/>
                 </td>
             </tr>
         );
@@ -30,7 +46,8 @@ export class TableInputRow extends Component {
 TableInputRow.propTypes = {
     sourceWord: PropTypes.string.isRequired,
     destinationWord: PropTypes.string.isRequired,
-    onRemoveBtnClicked: PropTypes.func.isRequired
+    onRemoveBtnClicked: PropTypes.func.isRequired,
+    onInputChanged: PropTypes.func.isRequired
 };
 
 export default TableInputRow;

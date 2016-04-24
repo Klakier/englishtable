@@ -1,44 +1,48 @@
 /// <reference path="./../../../../typings/main.d.ts" />
 
-import React, { PropTypes, Component } from 'react';
-import TableInputRow from './TableInputRow'
+import React, {PropTypes, Component} from 'react';
+import TableInputRow from './TableInputRow';
+import Btn from './Button';
 
 export class TableInput extends Component {
     render() {
         let rows = this.getRows();
         return (
-            <table>
-                <thead>
+            <div>
+                <Btn content={'Add'} onClick={this.props.onNewRowBtnClicked}/>
+                <table className="table">
+                    <thead>
                     <tr>
-                        Original
+                        <th>Original</th>
                     </tr>
                     <tr>
-                        Translated
+                        <th>Translated</th>
                     </tr>
-                </thead>
-                <tbody>
+                    </thead>
+                    <tbody>
                     {rows}
-                </tbody>
-            </table>
+                    </tbody>
+                </table>
+            </div>
         );
     };
-    
+
     getRows() {
-        let {items, onRemoveRowClicked, onTableInputChanged} = this.props;
+        let {items, onRemoveRowClicked, onNewRowBtnClicked, onInputChanged} = this.props;
         var result = [];
         items.map((item) => {
             result.push(
-                <TableInputRow 
-                    key={item.key}
+                <TableInputRow
+                    key={item.rowId}
                     sourceWord={item.sourceWord}
                     destinationWord={item.destinationWord}
-                    onRemoveBtnClicked={() => onRemoveRowClicked(item.key)}
-                    onInputChanged={(source, destination) => onTableInputChanged(item.key, source, destination)}
+                    onRemoveBtnClicked={() => onRemoveRowClicked(item.rowId)}
+                    onInputChanged={(source, destination) => onInputChanged(item.rowId, source, destination)}
                 />
             )
-        } );
-        
-        
+        });
+
+
         return result;
     };
 }
@@ -46,7 +50,8 @@ export class TableInput extends Component {
 TableInput.propTypes = {
     items: PropTypes.array.isRequired,
     onRemoveRowClicked: PropTypes.func.isRequired,
-    onTableInputChanged: PropTypes.func.isRequired
+    onNewRowBtnClicked: PropTypes.func.isRequired,
+    onInputChanged: PropTypes.func.isRequired
 };
 
 export default TableInput;
