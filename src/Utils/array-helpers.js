@@ -4,6 +4,6 @@ export function removeItem(array, predicate) {
         return false;
     }
     
-    array.slice(index, 1);
+    array.splice(index, 1);
     return true;
 }
