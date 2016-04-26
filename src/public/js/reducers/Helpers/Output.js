@@ -1,7 +1,7 @@
 /// <reference path="./../../../../typings/main.d.ts" />
 
-import shuffle from './../../../Utils/shuffle';
-import {removeItem} from './../../../Utils/array-helpers';
+import shuffle from '../../../../Utils/shuffle';
+import {removeItem} from '../../../../Utils/array-helpers';
 
 class Output {
     constructor(sourceWords, destinationWords) {
@@ -37,6 +37,34 @@ class Output {
     }
 }
 
+const splitToSourceAndDestinationWords = (table) =>
+{
+    let sourceWords = [];
+    let destinationWords = [];
+    for(let value of table) {
+        sourceWords.push({rowId: value.rowId, text: value.sourceWord});
+        destinationWords.push({rowId: value.rowId, text: value.destinationWord});
+    }
+    
+    return {sourceWords, destinationWords};
+};
+
+Output.tableChanged = (newTable) => {
+    const splited = splitToSourceAndDestinationWords(newTable);
+    
+    let output = new Output(splited.sourceWords, splited.destinationWords);
+    output.shuffle();
+    return output.getResult();
+};
+
+Output.init = () => {
+    return {
+        sourceWords:[],
+        destinationWords: []
+    };
+};
+
+
 Output.add = (state, row) => {
     let output = new Output(state.sourceWords, state.destinationWords);
     output.addRow(row);
@@ -55,13 +83,6 @@ Output.inputChanged = (state, row) => {
     let output = new Output(state.sourceWords, state.destinationWords);
     output.textChanged(row);
     return output.getResult();
-};
-
-Output.init = () => {
-    return {
-        sourceWords:[],
-        destinationWords: []
-    };
 };
 
 export default Output;

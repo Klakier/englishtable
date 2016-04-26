@@ -9,10 +9,9 @@ import Configuration from '../containers/Configuration';
 export default class TableApp extends Component {
     render() {
         return (
-            <div>
+            <div className="container">
                 <Header header={"HEADER"} />
                 <Input />
-                <hr/>
                 <Configuration />
             </div>
         );

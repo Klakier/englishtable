@@ -1,15 +1,12 @@
 /// <reference path="./../../../../typings/main.d.ts" />
 
-import React, { PropTypes, Component } from 'react';
+import React, {PropTypes, Component} from 'react';
+import {columnNames} from './../columnTypes';
 
-
-class ButtonWithOptions extends Component
-{
+class ButtonWithOptions extends Component {
     createOption(option) {
-        const {
-            onChanged,
-        } = this.props;
-        
+        const {onChanged} = this.props;
+
         return (
             <a key={ option.key } onClick={ (e) => onChanged(option.key) }>
                 <li>{option.text}</li>
@@ -17,27 +14,21 @@ class ButtonWithOptions extends Component
         );
     }
 
-    getSelectedOptionText(selectedOption, options) {
-        let option = options.find(v => v.key == selectedOption);
-
-        return option.text;
-    }
-
     render() {
-        const { 
+        const {
             selectedOption, options, onChanged,
         } = this.props;
 
         let menuOptions = [];
-        for (let option of options) {
-            menuOptions.push(this.createOption(option));
+        for (let option of Object.keys(options)) {
+            menuOptions.push(this.createOption({key: option, text: options[option]}));
         }
 
         return (
             <div className='btn-group'>
                 <a type='button' className='btn btn-primary dropdown-toggle' data-toggle='dropdown'>
-                    <span>{this.getSelectedOptionText(selectedOption, options)}</span>
-                    <span className='caret' />
+                    <span>{columnNames[selectedOption]}</span>
+                    <span className='caret'/>
                 </a>
                 <ul className='dropdown-menu'>
                     {menuOptions}
@@ -47,7 +38,6 @@ class ButtonWithOptions extends Component
     };
 }
 
-ButtonWithOptions.propTypes = {
-};
+ButtonWithOptions.propTypes = {};
 
 export default ButtonWithOptions;

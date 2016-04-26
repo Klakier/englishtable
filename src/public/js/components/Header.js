@@ -15,6 +15,6 @@ const Header = ({header}) => {
 
 Header.propTypes = {
   header: PropTypes.any.isRequired
-}
+};
 
 export default Header;

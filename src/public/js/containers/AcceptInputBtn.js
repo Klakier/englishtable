@@ -4,7 +4,7 @@ import { inputAccepted } from './../actions';
 
 const mapStateToProps = (state, ownProps) => {
   return {
-    content: 'Accept Input'
+    content: 'Accept TableInput'
   };
 };
 

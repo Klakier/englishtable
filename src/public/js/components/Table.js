@@ -2,7 +2,8 @@
 
 import React, {PropTypes, Component} from 'react';
 
-import BtnWithOptions from './../components/ButtonWithOptions';
+import BtnWithOptions from './ButtonWithOptions';
+import {columnTypes} from './../columnTypes';
 
 class Table extends Component {
     createOptionChangedHandler(columnId) {
@@ -38,10 +39,13 @@ class Table extends Component {
         let columns = [];
         for (let header of headers) {
             switch (header.selectedOption) {
-                case 1:
+                case columnTypes.OrdinaryNumber:
+                    columns.push(<td key={header.key}>{row.no}</td>);
+                    break;
+                case columnTypes.OriginalWord:
                     columns.push(<td key={header.key}>{row.sourceWord.text}</td>);
                     break;
-                case 2:
+                case columnTypes.TranslatedWord:
                     columns.push(<td key={header.key}>{row.destinationWord.text}</td>);
                     break;
                 default:

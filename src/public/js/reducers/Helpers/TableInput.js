@@ -1,16 +1,19 @@
 /// <reference path="./../../../../typings/main.d.ts" />
 
-class Input {
+class TableInput {
+    static tableChanged(newTable) {
+        return newTable;
+    }
 }
 
-Input.add = (state, row) => {
+TableInput.add = (state, row) => {
     return [
         ...state,
         row
     ];
 };
 
-Input.remove = (state, rowId) => {
+TableInput.remove = (state, rowId) => {
     let index = state.findIndex(ele => ele.rowId == rowId);
     if (index === -1) {
         return state;
@@ -21,7 +24,7 @@ Input.remove = (state, rowId) => {
     ];
 };
 
-Input.inputChanged = (state, row) => {
+TableInput.inputChanged = (state, row) => {
     console.info('Should be removed');
     let index = state.findIndex(ele => ele.rowId == row.rowId);
     if (index === -1) {
@@ -35,8 +38,8 @@ Input.inputChanged = (state, row) => {
     ]
 };
 
-Input.init = () => {
+TableInput.init = () => {
     return [];
 };
 
-export default Input;
+export default TableInput;

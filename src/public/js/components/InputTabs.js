@@ -4,29 +4,50 @@ import {Tab, Tabs, TabList, TabPanel} from 'react-tabs';
 import React, {PropTypes, Component} from 'react';
 import TextInput from './TextInput';
 import TableInput from './TableInput';
+import tabTypes from './../tabTypes';
 
 export class InputTabs extends Component {
-    handleSelect(currentTab, previousTab) {
-        console.log('current tab ' + currentTab + ', prevous tab' + previousTab);
+    constructor(props) {
+        super(props);
+        this.state = {selectedTab: 0};
+    }
+
+    handleSelect(selectedTab, previousTab) {
+        const { onTabChanged } = this.props;
+        
+        onTabChanged(selectedTab, previousTab);
+        this.setState({selectedTab: selectedTab});
     }
 
     render() {
+        const {
+            onTableInputChanged,
+            onRemoveRowBtnClicked,
+            onNewRowBtnClicked,
+            items,
+            onTextInputAccepted,
+            initialText,
+        } = this.props;
+
         return (
-            <Tabs onSelect={this.handleSelect}>
+            <Tabs onSelect={(selected, prev) => this.handleSelect(selected, prev)}
+                  selectedIndex={this.state.selectedTab}>
                 <TabList>
-                    <Tab>text</Tab>
-                    <Tab>table</Tab>
+                    <Tab>{tabTypes.text}</Tab>
+                    <Tab>{tabTypes.table}</Tab>
                 </TabList>
                 <TabPanel>
                     <TableInput
-                        onInputChanged={this.props.onTableInputChanged}
-                        items={this.props.items}
-                        onRemoveRowClicked={this.props.onRemoveRowBtnClicked}
-                        onNewRowBtnClicked={this.props.onNewRowBtnClicked}
+                        onInputChanged={onTableInputChanged}
+                        items={items}
+                        onRemoveRowClicked={onRemoveRowBtnClicked}
+                        onNewRowBtnClicked={onNewRowBtnClicked}
                     />
                 </TabPanel>
                 <TabPanel>
-                    <TextInput onInputChanged={this.props.onTextInputChanged}/>
+                    <TextInput
+                        inputAccepted={onTextInputAccepted}
+                        initialText={initialText}/>
                 </TabPanel>
             </Tabs>
         );
@@ -36,7 +57,9 @@ export class InputTabs extends Component {
 
 InputTabs.propTypes = {
     onTabChanged: PropTypes.func.isRequired,
-    onTextInputChanged: PropTypes.func.isRequired,
+
+    onTextInputAccepted: PropTypes.func.isRequired,
+    initialText: PropTypes.string.isRequired,
 
     onTableInputChanged: PropTypes.func.isRequired,
     onRemoveRowBtnClicked: PropTypes.func.isRequired,

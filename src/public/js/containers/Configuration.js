@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import Table from './../components/Table';
+import Table from '../components/Table';
 import {toArray} from './../../../Utils/conversions';
 
 import {configurationColumnTypeChanged, configurationColumnNameChanged} from './../reducers/configuration';

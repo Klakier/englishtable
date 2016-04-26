@@ -1,17 +1,38 @@
-import React, { PropTypes } from 'react';
+import React, {PropTypes, Component} from 'react';
+import Button from './Button';
 
-const TextInput = ({ onInputChanged }) => {
-    return (
-        <div>
+class TextInput extends Component {
+    constructor(props) {
+        super(props);
+        const {initialText} = this.props;
+        this.state = {text: initialText};
+    }
+
+    handleChange(e) {
+        console.log('change');
+        this.setState({text: e.target.value});
+    }
+    
+    handleBtnClicked() {
+        const {inputAccepted} = this.props;
+        inputAccepted(this.state.text);
+    }
+
+    render() {
+        return (
             <div>
-                <textarea onChange={e => onInputChanged(e.target.value)} />
+                <div>
+                    <textarea value={this.state.text} onChange={e => this.handleChange(e)}/>
+                    <Button onClick={() => this.handleBtnClicked()} content="Accept"/>
+                </div>
             </div>
-        </div>
-    );
-};
+        );
+    }
+}
 
 TextInput.propTypes = {
-    onInputChanged: PropTypes.any.isRequired
+    inputAccepted: PropTypes.func.isRequired,
+    initialText: PropTypes.string.isRequired
 };
 
 export default TextInput;

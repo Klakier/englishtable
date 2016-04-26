@@ -5,6 +5,8 @@ import {
     createAction
 } from 'redux-actions';
 
+import {columnTypes, columnNames} from './../columnTypes';
+
 export const CONFIGURATION_COLUMN_TYPE_CHANGED = 'CONFIGURATION_COLUMN_TYPE_CHANGED';
 export const CONFIGURATION_COLUMN_NAME_CHANGED = 'CONFIGURATION_COLUMN_NAME_CHANGED';
 
@@ -27,51 +29,34 @@ export const configurationColumnNameChanged = createAction(
         };
     });
 
-var options = {
-    Space: 'Empty',
-    SequenceNumber: 'SequenceNumber',
-    OrginalWord: 'Orginal word',
-    TransalatedWord: 'Transalted word',
-};
-
-var key = 0;
-var availableOptions = [];
-for (let option of Object.keys(options)) {
-    availableOptions.push({
-        key: key,
-        text: options[option]
-    });
-    key++;
-}
-
 var initialConfiguration = () => {
     return {
         0: {
-            selectedOption: 1,
+            selectedOption: columnTypes.OrdinaryNumber,
             columnName: '',
-            options: availableOptions,
+            options: columnNames,
         },
         1: {
             // TOD Id should be used.
-            selectedOption: 1,
+            selectedOption: columnTypes.OriginalWord,
             columnName: '',
-            options: availableOptions,
+            options: columnNames,
         },
         2: {
-            selectedOption: 1,
+            selectedOption: columnTypes.Space,
             columnName: '',
-            options: availableOptions,
+            options: columnNames
         },
         3: {
-            selectedOption: 1,
+            selectedOption: columnTypes.Space,
             columnName: '',
-            options: availableOptions,
+            options: columnNames
         },
         4: {
-            selectedOption: 1,
+            selectedOption: columnTypes.TranslatedWord,
             columnName: '',
-            options: availableOptions,
-        },
+            options: columnNames
+        }
     };
 };
 

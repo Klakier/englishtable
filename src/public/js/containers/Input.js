@@ -5,28 +5,29 @@ import {connect} from 'react-redux';
 import {
     newRowAdded,
     rowRemoved,
-    tableInputChanged
+    tableInputChanged,
+    textInputAccepted,
+    inputMethodChanged
 } from '../reducers/dictionary';
-import InputTabs from './../components/InputTabs';
+
+import InputTabs from '../components/InputTabs';
 
 const mapStateToProps = (state) => {
-    for(let key of Object.keys(state)) {
-        console.log(key);
-    }
-    console.log(state);
-    console.log(state.dictionary.input);
     return {
-        items: state.dictionary.input
+        items: state.dictionary.input,
+        initialText: state.dictionary.textInput
     };
 };
 
 const mapDispatchToProps = (dispatch) => {
     return {
         onTabChanged: (selectedTab, previousTab) => {
-            console.log(`Selected tab: ${selectedTab}, previous tab: ${previousTab}.`);
+            dispatch(inputMethodChanged(selectedTab, previousTab));
+            console.log(`Selected tab: ${selectedTab}, previous tab : ${previousTab}.`);
+            return selectedTab;
         },
 
-        onTextInputChanged: (input) => console.log(`New text input ${input}.`),
+        onTextInputAccepted: (text) => dispatch(textInputAccepted(text)),
 
         onTableInputChanged: (rowId, sourceWord, destinationWord) => {
             console.log(`New text input ${sourceWord}, ${destinationWord}.`);
