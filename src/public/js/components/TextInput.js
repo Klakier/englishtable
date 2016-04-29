@@ -2,27 +2,22 @@ import React, {PropTypes, Component} from 'react';
 import Button from './Button';
 
 class TextInput extends Component {
-    constructor(props) {
-        super(props);
-        const {initialText} = this.props;
-        this.state = {text: initialText};
-    }
-
     handleChange(e) {
-        console.log('change');
-        this.setState({text: e.target.value});
+        const {onTextChanged} = this.props;
+        onTextChanged(e.target.value);
     }
     
     handleBtnClicked() {
         const {inputAccepted} = this.props;
-        inputAccepted(this.state.text);
+        inputAccepted();
     }
 
     render() {
+        const {text} = this.props;
         return (
             <div>
                 <div>
-                    <textarea value={this.state.text} onChange={e => this.handleChange(e)}/>
+                    <textarea value={text} onChange={e => this.handleChange(e)}/>
                     <Button onClick={() => this.handleBtnClicked()} content="Accept"/>
                 </div>
             </div>
@@ -32,7 +27,8 @@ class TextInput extends Component {
 
 TextInput.propTypes = {
     inputAccepted: PropTypes.func.isRequired,
-    initialText: PropTypes.string.isRequired
+    onTextChanged: PropTypes.func.isRequired,
+    text: PropTypes.string.isRequired
 };
 
 export default TextInput;

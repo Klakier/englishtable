@@ -7,13 +7,15 @@ import TextInput from './Helpers/TextInput';
 import Output from './Helpers/Output';
 
 export const TEXT_INPUT_ACCEPTED = 'TEXT_INPUT_ACCEPTED';
+export const TEXT_INPUT_CHANGED = 'TEXT_INPUT_CHANGED';
 export const TABLE_INPUT_CHANGED = 'TABLE_INPUT_CHANGED';
 export const NEW_ROW_ADDED = "TABLE_INPUT_NEW_ROW_ADDED";
 export const ROW_REMOVED = "TABLE_INPUT_ROW_REMOVED";
 export const INPUT_METHOD_CHANGED = "INPUT_METHOD_CHANGED";
 export const INIT = "@@INIT";
 
-export const textInputAccepted = createAction(TEXT_INPUT_ACCEPTED, (text) => text);
+export const textInputAccepted = createAction(TEXT_INPUT_ACCEPTED);
+export const textInputChanged = createAction(TEXT_INPUT_CHANGED, (text) => text);
 export const tableInputChanged = createAction(TABLE_INPUT_CHANGED);
 export const newRowAdded = createAction(NEW_ROW_ADDED);
 export const rowRemoved = createAction(ROW_REMOVED);
@@ -31,7 +33,7 @@ const getNextKey = () => {
     return key;
 };
 
-const acceptTextInput = (state, textInput) => {
+const acceptTextInput = (textInput) => {
     var newTable = TextInput.getRows(textInput);
 
     return {
@@ -41,10 +43,10 @@ const acceptTextInput = (state, textInput) => {
     };
 };
 
-const handleInputMethodChanged =(state, selectedInput) => {
+const handleInputMethodChanged = (state, selectedInput) => {
     switch (selectedInput) {
         case 0: // TODO Has to be changed to some identifiers
-            return acceptTextInput(state, state.textInput);
+            return acceptTextInput(state.textInput);
         case 1: // The same as above
             return {
                 ...state,
@@ -87,8 +89,13 @@ const reducer = (state = {}, action) => {
                 input: TableInput.inputChanged(state.input, action.payload),
                 output: Output.inputChanged(state.output, action.payload)
             };
+        case TEXT_INPUT_CHANGED:
+            return {
+                ...state,
+                textInput: TextInput.textChanged(action.payload)
+            };
         case TEXT_INPUT_ACCEPTED:
-            return acceptTextInput(state, action.payload);
+            return acceptTextInput(state.textInput);
 
         case INPUT_METHOD_CHANGED:
             return handleInputMethodChanged(state, action.payload.selectedInput);

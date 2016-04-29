@@ -13,8 +13,8 @@ export class InputTabs extends Component {
     }
 
     handleSelect(selectedTab, previousTab) {
-        const { onTabChanged } = this.props;
-        
+        const {onTabChanged} = this.props;
+
         onTabChanged(selectedTab, previousTab);
         this.setState({selectedTab: selectedTab});
     }
@@ -26,7 +26,8 @@ export class InputTabs extends Component {
             onNewRowBtnClicked,
             items,
             onTextInputAccepted,
-            initialText,
+            onTextInputChanged,
+            text
         } = this.props;
 
         return (
@@ -47,19 +48,20 @@ export class InputTabs extends Component {
                 <TabPanel>
                     <TextInput
                         inputAccepted={onTextInputAccepted}
-                        initialText={initialText}/>
+                        onTextChanged={onTextInputChanged}
+                        text={text}/>
                 </TabPanel>
             </Tabs>
         );
     };
 }
-;
 
 InputTabs.propTypes = {
     onTabChanged: PropTypes.func.isRequired,
 
     onTextInputAccepted: PropTypes.func.isRequired,
-    initialText: PropTypes.string.isRequired,
+    onTextInputChanged: PropTypes.func.isRequired,
+    text: PropTypes.string.isRequired,
 
     onTableInputChanged: PropTypes.func.isRequired,
     onRemoveRowBtnClicked: PropTypes.func.isRequired,

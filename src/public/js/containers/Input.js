@@ -6,6 +6,7 @@ import {
     newRowAdded,
     rowRemoved,
     tableInputChanged,
+    textInputChanged,
     textInputAccepted,
     inputMethodChanged
 } from '../reducers/dictionary';
@@ -15,7 +16,7 @@ import InputTabs from '../components/InputTabs';
 const mapStateToProps = (state) => {
     return {
         items: state.dictionary.input,
-        initialText: state.dictionary.textInput
+        text: state.dictionary.textInput
     };
 };
 
@@ -26,8 +27,10 @@ const mapDispatchToProps = (dispatch) => {
             console.log(`Selected tab: ${selectedTab}, previous tab : ${previousTab}.`);
             return selectedTab;
         },
+        
+        onTextInputChanged: (text) => dispatch(textInputChanged(text)),
 
-        onTextInputAccepted: (text) => dispatch(textInputAccepted(text)),
+        onTextInputAccepted: () => dispatch(textInputAccepted()),
 
         onTableInputChanged: (rowId, sourceWord, destinationWord) => {
             console.log(`New text input ${sourceWord}, ${destinationWord}.`);

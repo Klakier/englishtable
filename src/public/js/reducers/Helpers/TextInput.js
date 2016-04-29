@@ -20,6 +20,10 @@ class TextInput {
         let table = toTable(state, columnNames);
         return table.map((e,i) => { return {...e, rowId: i}});
     }
+    
+    static textChanged(newText) {
+        return newText;
+    }
 }
 
 export default TextInput;
