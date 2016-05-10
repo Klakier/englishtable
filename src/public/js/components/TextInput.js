@@ -7,9 +7,14 @@ class TextInput extends Component {
         onTextChanged(e.target.value);
     }
     
-    handleBtnClicked() {
+    handleAcceptBtnClicked() {
         const {inputAccepted} = this.props;
         inputAccepted();
+    }
+    
+    handleDiscardBtnClicked() {
+        const {inputDiscarded} = this.props;
+        inputDiscarded();
     }
 
     render() {
@@ -18,7 +23,8 @@ class TextInput extends Component {
             <div>
                 <div>
                     <textarea value={text} onChange={e => this.handleChange(e)}/>
-                    <Button onClick={() => this.handleBtnClicked()} content="Accept"/>
+                    <Button onClick={() => this.handleAcceptBtnClicked()} content="Accept"/>
+                    <Button onClick={() => this.handleDiscardBtnClicked()} content="Discard"/>
                 </div>
             </div>
         );
@@ -27,6 +33,7 @@ class TextInput extends Component {
 
 TextInput.propTypes = {
     inputAccepted: PropTypes.func.isRequired,
+    inputDiscarded: PropTypes.func.isRequired,
     onTextChanged: PropTypes.func.isRequired,
     text: PropTypes.string.isRequired
 };

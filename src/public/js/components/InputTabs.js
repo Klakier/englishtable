@@ -7,10 +7,6 @@ import TableInput from './TableInput';
 import tabTypes from './../tabTypes';
 
 export class InputTabs extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {selectedTab: 0};
-    }
 
     handleSelect(selectedTab, previousTab) {
         const {onTabChanged} = this.props;
@@ -26,17 +22,26 @@ export class InputTabs extends Component {
             onNewRowBtnClicked,
             items,
             onTextInputAccepted,
+            onTextInputDiscarded,
             onTextInputChanged,
-            text
+            text,
+            selectedTab
         } = this.props;
 
         return (
             <Tabs onSelect={(selected, prev) => this.handleSelect(selected, prev)}
-                  selectedIndex={this.state.selectedTab}>
+                  selectedIndex={selectedTab}>
                 <TabList>
                     <Tab>{tabTypes.text}</Tab>
                     <Tab>{tabTypes.table}</Tab>
                 </TabList>
+                <TabPanel>
+                    <TextInput
+                        inputAccepted={onTextInputAccepted}
+                        inputDiscarded={onTextInputDiscarded}
+                        onTextChanged={onTextInputChanged}
+                        text={text}/>
+                </TabPanel>
                 <TabPanel>
                     <TableInput
                         onInputChanged={onTableInputChanged}
@@ -44,12 +49,6 @@ export class InputTabs extends Component {
                         onRemoveRowClicked={onRemoveRowBtnClicked}
                         onNewRowBtnClicked={onNewRowBtnClicked}
                     />
-                </TabPanel>
-                <TabPanel>
-                    <TextInput
-                        inputAccepted={onTextInputAccepted}
-                        onTextChanged={onTextInputChanged}
-                        text={text}/>
                 </TabPanel>
             </Tabs>
         );

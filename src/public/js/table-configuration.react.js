@@ -34,7 +34,7 @@ var BtnWithOtions = React.createClass({
                 <span>
                     {this.getDefaultOption()}
                 </span>
-                <span className="caret"></span>
+                <span className="caret" />
             </a>
             <ul className="dropdown-menu">
                 {options}

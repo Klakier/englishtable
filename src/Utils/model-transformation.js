@@ -13,6 +13,10 @@ var splitWithoutEmptyEntries = (array, separator) => {
 var tryDeduceSeparator = (value) => {
     var result = [];
     let matches = value.match(/(\s+)/g);
+    if(matches === null) {
+        throw `Missing space in line '${value}'.`
+    }
+    
     matches.forEach(match => {
         var isTab = match.indexOf('\t') !== -1;
         result.push({
@@ -24,9 +28,16 @@ var tryDeduceSeparator = (value) => {
     result.sort((a, b) => a.priority < b.priority);
 
     if (result.length === 0) {
-        throw 'Can not deduce separator';
+        throw `Can not deduce separator for line '${value}'`;
     }
+
     var separator = result[0];
+    var numberOfSeparators = result.filter(i => i.value == separator.value ).length;
+
+    if(numberOfSeparators > 1) {
+        throw `Characters '${separator.value}' was elected as separator but it contains ${numberOfSeparators} times in line '${value}'.
+        Allowed is only one occurrence of selected separator`;
+    }
 
     return separator.value;
 };

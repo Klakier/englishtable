@@ -1,8 +1,12 @@
 /// <reference path="./../../../../typings/main.d.ts" />
 
 class TableInput {
-    static tableChanged(newTable) {
-        return newTable;
+    static tableAccepted(state) {
+        return state;
+    }
+    
+    static getRows(state) {
+        return state;
     }
 }
 

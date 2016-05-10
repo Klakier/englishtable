@@ -49,8 +49,8 @@ const splitToSourceAndDestinationWords = (table) =>
     return {sourceWords, destinationWords};
 };
 
-Output.tableChanged = (newTable) => {
-    const splited = splitToSourceAndDestinationWords(newTable);
+Output.tableChanged = (rows) => {
+    const splited = splitToSourceAndDestinationWords(rows);
     
     let output = new Output(splited.sourceWords, splited.destinationWords);
     output.shuffle();

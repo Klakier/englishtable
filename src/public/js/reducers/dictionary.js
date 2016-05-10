@@ -1,30 +1,32 @@
 /// <reference path="./../../../../typings/main.d.ts" />
 
 import {createAction} from 'redux-actions';
-import tabTypes from './../tabTypes';
 import TableInput from './Helpers/TableInput';
 import TextInput from './Helpers/TextInput';
 import Output from './Helpers/Output';
+import InputType from './Helpers/InputType';
 
-export const TEXT_INPUT_ACCEPTED = 'TEXT_INPUT_ACCEPTED';
 export const TEXT_INPUT_CHANGED = 'TEXT_INPUT_CHANGED';
+
 export const TABLE_INPUT_CHANGED = 'TABLE_INPUT_CHANGED';
 export const NEW_ROW_ADDED = "TABLE_INPUT_NEW_ROW_ADDED";
 export const ROW_REMOVED = "TABLE_INPUT_ROW_REMOVED";
-export const INPUT_METHOD_CHANGED = "INPUT_METHOD_CHANGED";
-export const INIT = "@@INIT";
 
-export const textInputAccepted = createAction(TEXT_INPUT_ACCEPTED);
+export const TEXT_INPUT_SYNCHRONIZED = 'TEXT_INPUT_SYNCHRONIZED';
+export const TABLE_INPUT_SYNCHRONIZED = "TABLE_INPUT_SYNCHRONIZED";
+export const TRY_SWITCH_TO_TEXT_MODE = "TRY_SWITCH_TO_TEXT_MODE";
+export const TRY_SWITCH_TO_TABLE_MODE = "TRY_SWITCH_TO_TABLE_MODE";
+export const INIT = "@@redux/INIT";
+
 export const textInputChanged = createAction(TEXT_INPUT_CHANGED, (text) => text);
 export const tableInputChanged = createAction(TABLE_INPUT_CHANGED);
 export const newRowAdded = createAction(NEW_ROW_ADDED);
 export const rowRemoved = createAction(ROW_REMOVED);
-export const inputMethodChanged = createAction(
-    INPUT_METHOD_CHANGED,
-    (selectedInput, prevInput) => {
-        return {selectedInput, prevInput};
-    }
-);
+
+export const trySwitchToTextMode = createAction(TRY_SWITCH_TO_TEXT_MODE);
+export const trySwitchToTableMode = createAction(TRY_SWITCH_TO_TABLE_MODE);
+export const tableInputSynchronized = createAction(TABLE_INPUT_SYNCHRONIZED);
+export const textInputSynchronized = createAction(TEXT_INPUT_SYNCHRONIZED);
 
 
 let key = 0;
@@ -33,35 +35,12 @@ const getNextKey = () => {
     return key;
 };
 
-const acceptTextInput = (textInput) => {
-    var newTable = TextInput.getRows(textInput);
-
-    return {
-        textInput: textInput,
-        input: TableInput.tableChanged(newTable),
-        output: Output.tableChanged(newTable)
-    };
-};
-
-const handleInputMethodChanged = (state, selectedInput) => {
-    switch (selectedInput) {
-        case 0: // TODO Has to be changed to some identifiers
-            return acceptTextInput(state.textInput);
-        case 1: // The same as above
-            return {
-                ...state,
-                textInput: TextInput.update(state.input)
-            };
-        default:
-            throw `Unknown input type ${selectedInput}`;
-    }
-};
-
 const reducer = (state = {}, action) => {
     console.log(action);
     switch (action.type) {
         case INIT:
             return {
+                inputType: InputType.init(),
                 input: TableInput.init(),
                 textInput: TextInput.init(),
                 output: Output.init()
@@ -89,16 +68,56 @@ const reducer = (state = {}, action) => {
                 input: TableInput.inputChanged(state.input, action.payload),
                 output: Output.inputChanged(state.output, action.payload)
             };
+
         case TEXT_INPUT_CHANGED:
             return {
                 ...state,
-                textInput: TextInput.textChanged(action.payload)
+                textInput: TextInput.textChanged(state.textInput, action.payload)
             };
-        case TEXT_INPUT_ACCEPTED:
-            return acceptTextInput(state.textInput);
 
-        case INPUT_METHOD_CHANGED:
-            return handleInputMethodChanged(state, action.payload.selectedInput);
+        case TABLE_INPUT_SYNCHRONIZED:
+        {
+            const rows = TableInput.getRows(state.input);
+
+            return {
+                inputType: InputType.clearErrors(state.inputType),
+                textInput: TextInput.tableChanged(rows),
+                input: TableInput.tableAccepted(state.input),
+                output: Output.tableChanged(rows)
+            };
+        }
+
+        case TEXT_INPUT_SYNCHRONIZED:
+        {
+            const rows = TextInput.getRows(state.textInput);
+
+            if (rows.errors.length > 0) {
+                return {
+                    ...state,
+                    inputType: InputType.setErrors(state.inputType, rows.errors),
+                    textInput: TextInput.setErrors(state.textInput, rows.errors)
+                }
+            }
+
+            return {
+                inputType: InputType.clearErrors(state.inputType),
+                textInput: TextInput.inputAccepted(state.textInput),
+                input: TableInput.tableAccepted(rows.items),
+                output: Output.tableChanged(rows.items)
+            };
+        }
+
+        case TRY_SWITCH_TO_TEXT_MODE:
+            return {
+                ...state,
+                inputType: InputType.trySwitchToTextMode(state.inputType)
+            };
+
+        case TRY_SWITCH_TO_TABLE_MODE:
+            return {
+                ...state,
+                inputType: InputType.trySwitchToTableMode(state.inputType)
+            };
     }
 
     return state;
