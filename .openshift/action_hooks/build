@@ -28,6 +28,6 @@ if [ -f "${OPENSHIFT_REPO_DIR}"/package.json ]; then
    echo "  - Installing dependencies w/ new version of npm ... "
    echo
    #(cd "${OPENSHIFT_REPO_DIR}";  npm install -d)
-   (cd "${OPENSHIFT_REPO_DIR}"; export TMPDIR="/tmp"; node_modules/.bin/gulp rebuild)
+   (cd "${OPENSHIFT_REPO_DIR}"; export TMPDIR="/tmp"; npm install -d; node_modules/.bin/gulp build)
 fi
 
