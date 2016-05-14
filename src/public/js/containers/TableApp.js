@@ -5,6 +5,7 @@ import Header from '../components/Header';
 import Input from '../containers/Input';
 import ErrorNotifications from './ErrorPopup';
 import Configuration from '../containers/Configuration';
+import Print from '../containers/Print';
 
 export default class TableApp extends Component {
     render() {
@@ -13,6 +14,7 @@ export default class TableApp extends Component {
                 <Header header={"HEADER"}/>
                 <Input />
                 <Configuration />
+                <Print />
                 <ErrorNotifications />
             </div>
         );
